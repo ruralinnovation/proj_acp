@@ -49,6 +49,7 @@ vignettes/*.pdf
 *.RDS
 *.rds
 *.Rds
+*.xlsx
 
 .DS_Store
 .idea
