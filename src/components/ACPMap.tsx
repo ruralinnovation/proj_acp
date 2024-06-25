@@ -2,10 +2,8 @@ import Map, {Source, Layer} from 'react-map-gl';
 
 import style from './styles/ACPMap.module.css';
 
-// import { ACPFeature } from '../types';
-// import acp_demo_dta from '../data/acp_zip_demo_new_england.geojson';
-
-// const acp_demo: ACPFeature[] = acp_demo_dta as ACPFeature[];
+import acp_dta_geojson from '../data/acp_new_england.json';
+console.log(acp_dta_geojson);
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
