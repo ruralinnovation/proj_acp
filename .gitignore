@@ -51,6 +51,7 @@ vignettes/*.pdf
 *.rds
 *.Rds
 *.xlsx
+R/*.geojson
 
 .DS_Store
 .idea

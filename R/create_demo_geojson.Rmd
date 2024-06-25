@@ -1,0 +1,77 @@
+---
+title: "create_demo_geojson"
+author: "Camden Blatchly"
+date: "6/25/2024"
+output: html_document
+---
+
+```{r}
+
+library(dplyr)
+library(tidyr)
+library(sf)
+library(tigris)
+library(here)
+library(coriverse)
+library(rmapshaper)
+
+i_am("R/create_demo_geojson.Rmd")
+
+```
+
+
+```{r}
+
+con <- connect_to_db("proj_acp")
+acp_dta <- read_db(con, "draft_acp_dta_zip")
+DBI::dbDisconnect(con)
+
+```
+
+
+```{r}
+
+dta_clean <- acp_dta %>%
+  select(-date) %>%
+  tidyr::pivot_wider(
+    names_from = c(year, month),
+    values_from = c(totalsubscribers, pct_change_subscribers)
+  )
+
+```
+
+
+```{r}
+
+zip_geo <- tigris::zctas(cb = TRUE, year = 2020)
+
+```
+
+
+```{r}
+
+output_dta <- left_join(
+    dta_clean,
+    zip_geo %>% select(GEOID20, geometry),
+    by = c('zipcode' = 'GEOID20')
+  ) %>% 
+  st_as_sf() %>%
+  ms_simplify(keep = 0.05) 
+
+# Save the simplified data as GEOJSON
+st_write(output_dta, here("R/acp_zip_demo.geojson"), driver = "GeoJSON")
+
+
+# New England example
+output_dta %>%
+  filter(
+    stringr::str_starts(zipcode, "01") |
+    stringr::str_starts(zipcode, "02") |
+    stringr::str_starts(zipcode, "03") |
+    stringr::str_starts(zipcode, "04") |
+    stringr::str_starts(zipcode, "05")
+  ) %>%
+  st_write(here("R/acp_zip_demo_new_england.geojson"), driver = "GeoJSON")
+
+```
+
