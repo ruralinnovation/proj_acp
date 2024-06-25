@@ -1,0 +1,43 @@
+---
+title: "process_to_geojson"
+author: "Camden Blatchly"
+date: "6/25/2024"
+output: html_document
+---
+
+
+```{r}
+
+library(dplyr)
+library(tidyr)
+library(sf)
+library(tigris)
+library(here)
+library(coriverse)
+library(rmapshaper)
+
+i_am("R/process_to_geojson.Rmd")
+
+```
+
+
+```{r}
+
+raw_dta <- st_read("acp_uptake_wide.gpkg")
+
+```
+
+
+```{r}
+
+raw_dta %>%
+  filter(
+    stringr::str_starts(Zipcode, "01") |
+    stringr::str_starts(Zipcode, "02") |
+    stringr::str_starts(Zipcode, "03") |
+    stringr::str_starts(Zipcode, "04") |
+    stringr::str_starts(Zipcode, "05")
+  ) %>%
+  st_write("acp_new_england.geojson", driver = "GeoJSON")
+
+```
