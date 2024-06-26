@@ -19,19 +19,18 @@ export const dataLayer: FillLayer = {
   type: 'fill',
   paint: {
     'fill-color': [
-      'interpolate',
-      ['linear'],
-      // Use 'coalesce' to handle NaN values
-      ['coalesce', ['get', 'Percent_2024.02.01'], -99],
-      // Define the stops for interpolation
-      -99, 'rgba(208, 210, 206, 0.7)', // Color for NaN values
-      0, 'rgba(163, 226, 181, 0.7)',
-      50, 'rgba(86, 131, 116, 0.7)',
-      100, 'rgba(22, 52, 62, 0.7)'
+      'step',
+      ['coalesce', ['get', 'Percent_2024.02.01'], -99], // Use coalesce to handle undefined or non-existent property
+      'rgba(255, 0, 0, 0.7)', // Default color for NaN or values less than 0
+      0, 'rgba(163, 226, 181, 0.8)', // 0-25
+      25, 'rgba(116, 168, 141, 0.8)', // 25-50
+      50, 'rgba(69, 110, 102, 0.8)', // 50-75
+      75, 'rgba(22, 52, 62, 0.8)' // 75-100
     ],
     'fill-opacity': 0.8
   }
 };
+
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
