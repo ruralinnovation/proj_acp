@@ -10,27 +10,14 @@ import type { FeatureCollection } from "geojson";
 import acp_dta_geojson from '../data/acp_new_england.json';
 const acp_dta = acp_dta_geojson as FeatureCollection;
 
-import type {FillLayer} from 'react-map-gl';
 import { format } from 'd3-format';
 import ControlPanel from './ControlPanel';
 
-export const dataLayer: FillLayer = {
-  id: 'data',
-  type: 'fill',
-  paint: {
-    'fill-color': [
-      'step',
-      ['coalesce', ['get', 'Percent_2024.02.01'], -99], // Use coalesce to handle undefined or non-existent property
-      'rgba(255, 0, 0, 0.7)', // Default color for NaN or values less than 0
-      0, 'rgba(163, 226, 181, 0.8)', // 0-25
-      25, 'rgba(116, 168, 141, 0.8)', // 25-50
-      50, 'rgba(69, 110, 102, 0.8)', // 50-75
-      75, 'rgba(22, 52, 62, 0.8)' // 75-100
-    ],
-    'fill-opacity': 0.8
-  }
-};
+import { getFillLayer } from '../utils';
+import { ACPMapScale } from '../constants';
 
+
+const dataLayer = getFillLayer("data", "Percent_2024.02.01", .7, ACPMapScale);
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 

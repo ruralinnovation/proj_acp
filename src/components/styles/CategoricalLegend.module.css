@@ -1,3 +1,21 @@
 .categorical-legend {
-    background-color: red;
+    background-color: white;
+}
+
+.legend-entry {
+    display: flex;
+}
+
+.legend-entry .key {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.legend-entry p {
+    line-height: 40px;
+    vertical-align: center;
+
+    margin: 0px;
+    padding: 0px;
 }

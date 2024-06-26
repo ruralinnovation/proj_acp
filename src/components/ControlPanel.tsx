@@ -1,6 +1,7 @@
 import style from './styles/ControlPanel.module.css';
 
 import CategoricalLegend from './CategoricalLegend';
+import { ACPMapScale } from '../constants';
 
 function ControlPanel() {
 
@@ -11,7 +12,7 @@ function ControlPanel() {
         Map showing ACP enrollment by zipcode in February 2024. Hover over a zipcode to see details.
       </p>
       <hr />
-      <CategoricalLegend title={"Categorical legend title"} />
+      <CategoricalLegend title={"Percent enrolled"} scale={ ACPMapScale }/>
     </div>
   )
 
