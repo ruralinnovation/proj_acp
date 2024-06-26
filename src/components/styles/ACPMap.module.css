@@ -1,0 +1,33 @@
+.acp-map {
+    width: 100vw;
+    height: 100vh;
+}
+
+.tooltip {
+
+    font-family: 'Courier New', Courier, monospace;
+
+    position: absolute;
+    padding: 15px;
+    margin: 10px;
+
+    background: white;
+    color: black;
+
+    border: 1px solid black;
+    border-radius: 5px;
+
+    max-width: 300px;
+    font-size: 1rem;
+
+    z-index: 3;
+    pointer-events: none;
+}
+
+.tooltip h2 {
+    margin: 0px 0px 20px 0px;
+}
+
+.tooltip p {
+    margin: 0px;
+}
