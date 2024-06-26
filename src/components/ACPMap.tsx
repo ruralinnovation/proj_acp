@@ -11,30 +11,8 @@ import acp_dta_geojson from '../data/acp_new_england.json';
 const acp_dta = acp_dta_geojson as FeatureCollection;
 
 import type {FillLayer} from 'react-map-gl';
-
 import { format } from 'd3-format';
-
-// export const dataLayer: FillLayer = {
-//   id: 'data',
-//   type: 'fill',
-//   paint: {
-//     'fill-color': {
-//       property: 'Percent_2024.02.01',
-//       stops: [
-//         [0, '#3288bd'],
-//         [10, '#66c2a5'],
-//         [20, '#abdda4'],
-//         [30, '#e6f598'],
-//         [40, '#ffffbf'],
-//         [50, '#fee08b'],
-//         [60, '#fdae61'],
-//         [70, '#f46d43'],
-//         [80, '#d53e4f']
-//       ]
-//     },
-//     'fill-opacity': 0.8
-//   }
-// };
+import ControlPanel from './ControlPanel';
 
 export const dataLayer: FillLayer = {
   id: 'data',
@@ -54,6 +32,7 @@ export const dataLayer: FillLayer = {
     'fill-opacity': 0.8
   }
 };
+
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 function ACPMap() {
@@ -69,7 +48,6 @@ function ACPMap() {
 
     console.log("Event is ", hoveredFeature);
   
-    // prettier-ignore
     setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
 
   }, []);
@@ -77,6 +55,7 @@ function ACPMap() {
   return (
     <>
       <div className={style["acp-map"]}>
+        <ControlPanel />
         <Map
             initialViewState={{
             latitude: 40,
