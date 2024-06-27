@@ -16,14 +16,15 @@ import ControlPanel from './ControlPanel';
 import { getFillLayer } from '../utils';
 import { ACPMapScale } from '../constants';
 
-
-const dataLayer = getFillLayer("data", "Percent_2024.02.01", .7, ACPMapScale);
-
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
 function ACPMap() {
-
   const [ hoverInfo, setHoverInfo ] = useState<any>(null);
+  const [ filterDate, setFilterDate] = useState<string>("02/2024");
+
+  const [month, year]: string[] = filterDate.split("/");
+  const variable_suffix: string = year + '.' + month.padStart(2, '0') + '.01'
+  const dataLayer = getFillLayer("data", "Percent_" + variable_suffix, .7, ACPMapScale);
 
   const onHover: ((e: MapLayerMouseEvent) => void) | undefined = useCallback((event: MapLayerMouseEvent) => {
     const {
@@ -31,8 +32,6 @@ function ACPMap() {
       point: { x, y }
     } = event;
     const hoveredFeature = features && features[0];
-
-    console.log("Event is ", hoveredFeature);
   
     setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
 
@@ -41,7 +40,7 @@ function ACPMap() {
   return (
     <>
       <div className={style["acp-map"]}>
-        <ControlPanel />
+        <ControlPanel setParentDate={setFilterDate} />
         <Map
             initialViewState={{
             latitude: 40,
@@ -62,10 +61,10 @@ function ACPMap() {
                 <h2>Zipcode: {hoverInfo.feature.properties.Zipcode}</h2>
                 <p>
                   Eligble: {hoverInfo.feature.properties['Eligible']}<br/>
-                  Subscribed: {hoverInfo.feature.properties['Subscribed_2024.02.01']}<br/>
-                  Percent subscribed: {format(".3")(hoverInfo.feature.properties['Percent_2024.02.01']) + "%"}<br/>
-                  Change subscribed: {format(",")(hoverInfo.feature.properties['Change_Subscribed_2024.02.01'])}<br/>
-                  Change percent: {format(",.2s")(hoverInfo.feature.properties['Change_Percent_2024.02.01']) + "%"}<br/>
+                  Subscribed: {hoverInfo.feature.properties['Subscribed_' + variable_suffix]}<br/>
+                  Percent subscribed: {format(".3")(hoverInfo.feature.properties['Percent_' + variable_suffix]) + "%"}<br/>
+                  Change subscribed: {format(",")(hoverInfo.feature.properties['Change_Subscribed_' + variable_suffix])}<br/>
+                  Change percent: {format(",.2s")(hoverInfo.feature.properties['Change_Percent_' + variable_suffix]) + "%"}<br/>
                 </p>
             </div>
         )}
@@ -74,4 +73,4 @@ function ACPMap() {
   )
 }
 
-export default ACPMap
+export default ACPMap;
