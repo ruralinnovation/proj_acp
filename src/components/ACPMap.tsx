@@ -10,8 +10,8 @@ import type { FeatureCollection } from "geojson";
 import acp_dta_geojson from '../data/acp_new_england.json';
 const acp_dta = acp_dta_geojson as FeatureCollection;
 
-import { format } from 'd3-format';
 import ControlPanel from './ControlPanel';
+import RichTooltip from './RichTooltip';
 
 import { getFillLayer } from '../utils';
 import { ACPMapScale } from '../constants';
@@ -56,18 +56,7 @@ function ACPMap() {
                 <Layer {...dataLayer} />
             </Source>
         </Map>
-        {hoverInfo && (
-            <div className={style['tooltip']} style={{left: hoverInfo.x, top: hoverInfo.y}}>
-                <h2>Zipcode: {hoverInfo.feature.properties.Zipcode}</h2>
-                <p>
-                  Eligble: {hoverInfo.feature.properties['Eligible']}<br/>
-                  Subscribed: {hoverInfo.feature.properties['Subscribed_' + variable_suffix]}<br/>
-                  Percent subscribed: {format(".3")(hoverInfo.feature.properties['Percent_' + variable_suffix]) + "%"}<br/>
-                  Change subscribed: {format(",")(hoverInfo.feature.properties['Change_Subscribed_' + variable_suffix])}<br/>
-                  Change percent: {format(",.2s")(hoverInfo.feature.properties['Change_Percent_' + variable_suffix]) + "%"}<br/>
-                </p>
-            </div>
-        )}
+        {hoverInfo && <RichTooltip hoverInfo={hoverInfo} variable_suffix={variable_suffix} />}
       </div>
     </>
   )
