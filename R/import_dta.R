@@ -60,8 +60,8 @@ codebook <- data.frame(
 
 # write out ---------------------------------------------------------------
 con <- cori.db::connect_to_db('proj_acp')
-cori.db::write_db(con, 'acp_dta_zip', d_tidy)
-cori.db::write_db(con, 'codebook', codebook)
+cori.db::write_db(con, 'acp_dta_zip', d_tidy, overwrite = TRUE)
+cori.db::write_db(con, 'codebook', codebook, overwrite = TRUE)
 DBI::dbDisconnect(con)
 
 
