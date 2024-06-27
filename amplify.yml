@@ -1,0 +1,22 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - git submodule update --init --recursive
+        - npm i -g @aws-amplify/cli@${VERSION_AMPLIFY} --unsafe-perm=true
+        - npm ci
+    build:
+      commands:
+        - echo "GENERATE_SOURCEMAP=false" >> .env
+        - echo "VITE_APP_VERSION=1" >> .env
+        - npm install @rollup/rollup-linux-x64-gnu --save-optional
+        - npm run build
+  artifacts:
+    baseDirectory: build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .npm/**/*
+      - node_modules/**/*
