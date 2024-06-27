@@ -38,7 +38,7 @@ function ControlPanel({ setParentDate }: ControlPanelProps) {
 
   const [ date, setDate ] = useState<string>(date_lookup[26]);
 
-  const handleChange = (event: Event, newValue: number | number[]) => {
+  const handleChange = (_event: Event, newValue: number | number[]) => {
 
     if (typeof newValue == "number") {
       setDate(date_lookup[newValue]);
