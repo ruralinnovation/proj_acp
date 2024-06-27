@@ -11,6 +11,9 @@
     "type:check": "tsc --noEmit"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/material": "^5.15.20",
     "@types/d3-format": "^3.0.4",
     "@types/geojson": "^7946.0.14",
     "d3-format": "^3.1.0",
