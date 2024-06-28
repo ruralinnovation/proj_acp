@@ -41,3 +41,18 @@ raw_dta %>%
   st_write("acp_new_england.geojson", driver = "GeoJSON")
 
 ```
+
+```{r}
+
+raw_dta %>%
+  st_write("acp_all.geojson", driver = "GeoJSON")
+
+```
+
+```{r}
+
+raw_dta %>%
+  ms_simplify(keep = 0.05) %>%
+  st_write("acp_all_simplified.geojson", driver = "GeoJSON")
+
+```

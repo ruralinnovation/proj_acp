@@ -6,9 +6,10 @@ import { CategoricalScale } from '../types';
 interface CategoricalLegendProps {
   title: string;
   scale: CategoricalScale;
+  na_message?: string;
 }
 
-const CategoricalLegend: React.FC<CategoricalLegendProps> = ({ title, scale }) => {
+const CategoricalLegend: React.FC<CategoricalLegendProps> = ({ title, scale, na_message = "N/A"}) => {
 
 	const legend_rows = [];
   for (let i in scale.steps) {
@@ -25,6 +26,20 @@ const CategoricalLegend: React.FC<CategoricalLegendProps> = ({ title, scale }) =
       </div>
     )
   }
+
+  // Push N/A entry
+  legend_rows.push(
+    <div key={"NA"} className={style['legend-entry']} >
+      <div 
+        className={style['key']}
+        style={{
+          backgroundColor: scale.default_color
+        }}
+      >
+      </div>
+      <p>{na_message}</p>
+    </div>
+  )
 
   return (
     <div className={style['categorical-legend']}>

@@ -1,5 +1,5 @@
 import React from 'react';
-//import style from './styles/TrendLine.module.css';
+import style from './styles/TrendLine.module.css';
 
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
@@ -8,15 +8,16 @@ const formatTickDate = d3.timeFormat("%m/%y");
 const formatPercentTick = (d: number) => `${d}%`;
 
 interface TrendLineProps {
-    data: {date: Date, value: number}[]
+    data: {date: Date, value: number}[];
+    selected_date: Date;
 }
 
 const chartStyle = {
     // margin
-    margin: {top: 10, left: 30, bottom: 35, right: 25},
+    margin: {top: 10, left: 25, bottom: 25, right: 25},
     // Axis ticks
     tickFontSize: "1rem",
-    tickFontFamily: "Lato, monospace",
+    tickFontFamily: "Courier New, monospace",
     tickFontColor: "black",
     tickLineColor: "#d0d2ce",
     xTickSize: 12,
@@ -24,7 +25,7 @@ const chartStyle = {
     yTickOpacity: 0,
     // Data labels
     dataLabelFontSize: "1rem",
-    dataLabelFontFamily: "Lato, monospace",
+    dataLabelFontFamily: "Courier New, monospace",
     dataLabelFontColor: "black",
     dataLabelFontWeight: "bold",
     // Gridlines
@@ -38,7 +39,7 @@ const chartStyle = {
 
 }
 
-const TrendLine: React.FC<TrendLineProps> = ({ data }) => {
+const TrendLine: React.FC<TrendLineProps> = ({ data, selected_date }) => {
 
     const svgRef = useRef<SVGSVGElement>(null);
 
@@ -51,7 +52,6 @@ const TrendLine: React.FC<TrendLineProps> = ({ data }) => {
     
         const margin = {...chartStyle.margin};
         const tick_number = 4;
-        const y_axis_tick_size = 8;
     
         const svg = d3.select(svgRef.current)
           .attr("viewBox", `0 0 ${width} ${height}`)
@@ -72,12 +72,13 @@ const TrendLine: React.FC<TrendLineProps> = ({ data }) => {
     
         let xAxis = d3.axisBottom<Date>(xScale)
             .ticks(tick_number)
+            .tickSize(9)
             .tickFormat(formatTickDate);
 
         const yAxis = d3.axisLeft<number>(yScale)
-          .ticks(tick_number)
+          .tickValues([0, 50, 100])
           .tickFormat(formatPercentTick)
-          .tickSize(y_axis_tick_size);
+          .tickSize(0);
     
         svg
           .select<SVGGElement>('.x-axis')
@@ -91,8 +92,13 @@ const TrendLine: React.FC<TrendLineProps> = ({ data }) => {
     
         svg.selectAll(".y-axis text")
           .style("font-family", chartStyle.tickFontFamily)
-          .style("font-size", ".5rem")
-          .style("color", chartStyle.tickFontColor)      
+          .style("font-size", ".6rem")
+          .style("color", chartStyle.tickFontColor)  
+          
+          svg.selectAll(".x-axis text")
+          .style("font-family", chartStyle.tickFontFamily)
+          .style("font-size", ".6rem")
+          .style("color", chartStyle.tickFontColor)  
     
         // Define line generator
         const line = d3.line<{date: Date, value: number}>()
@@ -102,18 +108,28 @@ const TrendLine: React.FC<TrendLineProps> = ({ data }) => {
     
         svg.selectAll(".data-lines").remove();
         svg.append("path")
-        .datum(data)
-        .attr("class", "data-lines")
-        .attr("fill", "none")
-        .attr("stroke", chartStyle.defaultBarFill)
-        .attr("stroke-width", chartStyle.strokeWidth)
-        .attr("stroke-opacity", chartStyle.strokeOpacity)
-        .attr("d", line);
+          .datum(data)
+          .attr("class", "data-lines")
+          .attr("fill", "none")
+          .attr("stroke", chartStyle.defaultBarFill)
+          .attr("stroke-width", chartStyle.strokeWidth)
+          .attr("stroke-opacity", chartStyle.strokeOpacity)
+          .attr("d", line);
+
+        const selected_date_value = data.find(element => element.date.getTime() == selected_date.getTime())?.value;
+        svg.selectAll(".selected-date-circle").remove();
+        svg.append("circle")
+          .attr("class", "selected-date-circle")
+          .attr('cx', xScale(selected_date))
+          .attr('cy', yScale(selected_date_value? selected_date_value: 0))
+          .attr('r','4px')
+          .style('fill', 'black');
+          
         
-      }, [data]);    
+      }, [data, selected_date]);    
 
   return (
-    <div>
+    <div className={style['trendline']}>
         <h3>Percent subscribed over time</h3>
         <svg ref={svgRef} style={{width: "100%"}}>
             <g className="x-axis" />

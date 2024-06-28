@@ -1,7 +1,7 @@
 import { CategoricalScale } from "../types/";
   
 export const ACPMapScale : CategoricalScale = {
-    default_color: 'rgba(255, 0, 0, 1)',
+    default_color: 'rgba(208, 210, 206, 1)',
     steps: [
         {
             threshold: 0, 
