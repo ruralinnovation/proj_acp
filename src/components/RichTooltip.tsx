@@ -14,7 +14,8 @@ const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo })
     const trendline_data: {date: Date, value: number}[] = [];
     for (const [key, value] of Object.entries(hoverInfo.feature.properties)) {
         if (key.startsWith("Percent_") && typeof value == "number") {
-            const date_converted: Date = new Date(variable_suffix.replace(/\./g, "-"));
+            const clean_date = key.replace("Percent_", "").replace(/\./g, "-");
+            const date_converted: Date = new Date(clean_date);
             trendline_data.push({date: date_converted, value: value});
         }
     }

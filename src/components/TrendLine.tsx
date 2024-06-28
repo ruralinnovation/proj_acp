@@ -4,8 +4,8 @@ import style from './styles/TrendLine.module.css';
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 
-import { timeFormat } from 'd3-time-format';
-const formatDate = timeFormat("%Y-%m");
+const formatTickDate = d3.timeFormat("%m/%y");
+const formatPercentTick = (d: number) => `${d}%`;
 
 interface TrendLineProps {
     data: {date: Date, value: number}[]
@@ -13,7 +13,7 @@ interface TrendLineProps {
 
 const chartStyle = {
     // margin
-    margin: {top: 10, left: 0, bottom: 35, right: 25},
+    margin: {top: 10, left: 30, bottom: 35, right: 25},
     // Axis ticks
     tickFontSize: "1rem",
     tickFontFamily: "Lato, monospace",
@@ -43,33 +43,40 @@ const TrendLine: React.FC<TrendLineProps> = ({ data }) => {
     const svgRef = useRef<SVGSVGElement>(null);
 
     const width = 200;
-    const height = 200;
+    const height = 100;
 
     useEffect(() => {
     
         if (!svgRef.current) return;
     
         const margin = {...chartStyle.margin};
-        const tick_number = Math.floor(width / 225);
+        const tick_number = 4;
         const y_axis_tick_size = 8;
     
         const svg = d3.select(svgRef.current)
           .attr("viewBox", `0 0 ${width} ${height}`)
           .attr("preserveAspectRatio", "xMidYMid meet");
 
+
+        const start_date = new Date("2022-01-01");
+        const end_date = new Date("2024-02-01");
         const xScale = d3.scaleTime()
-            .domain(d3.extent(data, d => d.date) as [Date, Date])
+            .domain([start_date, end_date])
             .range([margin.left, width - margin.right]);
-    
+
         const yScale = d3
           .scaleLinear()
-          .domain([0, 100])
+          .domain([100, 0])
           .nice()
           .range([margin.top, height - margin.bottom]);
     
-        let xAxis = d3.axisBottom<Date>(xScale); // later is reassigned
+        let xAxis = d3.axisBottom<Date>(xScale)
+            .ticks(tick_number)
+            .tickFormat(formatTickDate);
+
         const yAxis = d3.axisLeft<number>(yScale)
-          .ticks(tick_number, "%")
+          .ticks(tick_number)
+          .tickFormat(formatPercentTick)
           .tickSize(y_axis_tick_size);
     
         svg
@@ -84,7 +91,7 @@ const TrendLine: React.FC<TrendLineProps> = ({ data }) => {
     
         svg.selectAll(".y-axis text")
           .style("font-family", chartStyle.tickFontFamily)
-          .style("font-size", chartStyle.tickFontSize)
+          .style("font-size", ".5rem")
           .style("color", chartStyle.tickFontColor)      
     
         // Define line generator
@@ -107,7 +114,7 @@ const TrendLine: React.FC<TrendLineProps> = ({ data }) => {
 
   return (
     <div>
-        <h2>Empty</h2>
+        <h3>Percent subscribed over time</h3>
         <svg ref={svgRef} style={{width: "100%"}}>
             <g className="x-axis" />
             <g className="y-axis" />
