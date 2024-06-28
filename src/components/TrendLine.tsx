@@ -1,5 +1,5 @@
 import React from 'react';
-import style from './styles/TrendLine.module.css';
+//import style from './styles/TrendLine.module.css';
 
 import { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
