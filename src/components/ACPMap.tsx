@@ -52,8 +52,17 @@ function ACPMap() {
             interactiveLayerIds={['data']}
             onMouseMove={onHover}
         >
-            <Source type="geojson" data={acp_dta}>
+            {/* <Source type="geojson" data={acp_dta}>
                 <Layer {...dataLayer} />
+            </Source> */}
+            <Source 
+              id="mapbox_test" 
+              type="vector"
+              url="mapbox://ruralinno.bead_blockv1b"
+            >
+              <Layer
+                {...getFillLayer("mapbox_test", "Percent_" + variable_suffix, .7, ACPMapScale)}
+              />
             </Source>
         </Map>
         {hoverInfo && <RichTooltip hoverInfo={hoverInfo} variable_suffix={variable_suffix} />}
