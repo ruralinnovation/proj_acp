@@ -19,7 +19,9 @@ export const getFillLayer = (layer_id: string, variable: string, fill_opacity: n
 
   // Construct the data layer object
   let dataLayer: FillLayer = {
-    id: layer_id,
+    id: "mapbox-test-layer",
+    source: "ruralinno.6vp9at1l",
+    "source-layer": "acp_new_england-9bxggy",
     type: 'fill',
     paint: {
       'fill-color': fillColorArray,

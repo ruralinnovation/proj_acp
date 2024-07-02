@@ -24,16 +24,21 @@ function ACPMap() {
 
   const [month, year]: string[] = filterDate.split("/");
   const variable_suffix: string = year + '.' + month.padStart(2, '0') + '.01'
-  const dataLayer = getFillLayer("data", "Percent_" + variable_suffix, .7, ACPMapScale);
+  // const dataLayer = getFillLayer("data", "Percent_" + variable_suffix, .7, ACPMapScale);
+  const dataLayer = getFillLayer("mapbox_test_layer", "Percent_" + variable_suffix, .7, ACPMapScale)
 
   const onHover: ((e: MapLayerMouseEvent) => void) | undefined = useCallback((event: MapLayerMouseEvent) => {
-    const {
-      features,
-      point: { x, y }
-    } = event;
-    const hoveredFeature = features && features[0];
+
+    console.log("WHAT IS EVENT ", event);
+    // const {
+    //   features,
+    //   point: { x, y }
+    // } = event;
+    // const hoveredFeature = features && features[0];
+
+    // console.log("hoveredFeature? ", hoveredFeature);
   
-    setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
+    // setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
 
   }, []);
 
@@ -42,26 +47,23 @@ function ACPMap() {
       <div className={style["acp-map"]}>
         <ControlPanel setParentDate={setFilterDate} />
         <Map
-            initialViewState={{
-            latitude: 40,
-            longitude: -100,
-            zoom: 3
-            }}
-            mapStyle="mapbox://styles/mapbox/light-v9"
-            mapboxAccessToken={MAPBOX_TOKEN}
-            interactiveLayerIds={['data']}
-            onMouseMove={onHover}
+          initialViewState={{
+          latitude: 40,
+          longitude: -100,
+          zoom: 3
+          }}
+          mapStyle="mapbox://styles/mapbox/light-v9"
+          mapboxAccessToken={MAPBOX_TOKEN}
+          interactiveLayerIds={['mapbox-test-layer']}
+          onMouseMove={onHover}
         >
-            {/* <Source type="geojson" data={acp_dta}>
-                <Layer {...dataLayer} />
-            </Source> */}
             <Source 
-              id="mapbox_test" 
+              id="ruralinno.6vp9at1l"
               type="vector"
-              url="mapbox://ruralinno.bead_blockv1b"
+              url="mapbox://ruralinno.6vp9at1l"
             >
               <Layer
-                {...getFillLayer("mapbox_test", "Percent_" + variable_suffix, .7, ACPMapScale)}
+                {...dataLayer}
               />
             </Source>
         </Map>
