@@ -27,10 +27,18 @@ raw_dta <- st_read("acp_uptake_wide.gpkg")
 
 ```
 
+```{r}
+
+clean_dta <- raw_dta %>%
+  select(Zipcode, Eligible, tidyr::starts_with("Subscribed_"), tidyr::starts_with("Percent"), geom) %>%
+  mutate(Zipcode = as.character(Zipcode)) %>%
+  sf::st_as_sf()
+
+```
 
 ```{r}
 
-raw_dta %>%
+clean_dta %>%
   filter(
     stringr::str_starts(Zipcode, "01") |
     stringr::str_starts(Zipcode, "02") |
@@ -38,21 +46,17 @@ raw_dta %>%
     stringr::str_starts(Zipcode, "04") |
     stringr::str_starts(Zipcode, "05")
   ) %>%
+  ms_simplify(keep = 0.1) %>%
+  st_transform(crs = "urn:ogc:def:crs:OGC:1.3:CRS84") %>%
   st_write("acp_new_england.geojson", driver = "GeoJSON")
 
 ```
 
 ```{r}
 
-raw_dta %>%
-  st_write("acp_all.geojson", driver = "GeoJSON")
-
-```
-
-```{r}
-
-raw_dta %>%
+clean_dta %>%
   ms_simplify(keep = 0.05) %>%
+  st_transform(crs = "urn:ogc:def:crs:OGC:1.3:CRS84") %>%
   st_write("acp_all_simplified.geojson", driver = "GeoJSON")
 
 ```
