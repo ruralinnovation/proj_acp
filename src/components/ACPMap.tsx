@@ -13,6 +13,8 @@ import { ACPMapScale } from '../constants';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
+const tileset_id = "ruralinno.4b5py10v";
+
 function ACPMap() {
   const [ hoverInfo, setHoverInfo ] = useState<any>(null);
   const [ filterDate, setFilterDate] = useState<string>("02/2024");
@@ -51,9 +53,9 @@ function ACPMap() {
           onMouseMove={onHover}
         >
             <Source 
-              id="ruralinno.2gmid5km"
+              id={tileset_id}
               type="vector"
-              url="mapbox://ruralinno.2gmid5km"
+              url={"mapbox://" + tileset_id}
             >
               <Layer
                 {...dataLayer}

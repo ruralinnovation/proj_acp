@@ -25,8 +25,8 @@ export const getFillLayer = (
   // Construct the data layer object
   let dataLayer: FillLayer = {
     id: layer_id,
-    source: "ruralinno.2gmid5km",
-    "source-layer": "acp_new_england",
+    source: "ruralinno.4b5py10v",
+    "source-layer": "acp_all_simplified-4eyk9g",
     type: 'fill',
     paint: {
       'fill-color': fillColorArray,

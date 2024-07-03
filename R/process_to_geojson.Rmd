@@ -32,7 +32,6 @@ raw_dta <- st_read("acp_uptake_wide.gpkg")
 clean_dta <- raw_dta %>%
   select(Zipcode, Eligible, tidyr::starts_with("Subscribed_"), tidyr::starts_with("Percent"), geom) %>%
   mutate(Zipcode = as.character(Zipcode)) %>%
-  # mutate(across(!c(Zipcode, geom), ~ ifelse(is.na(.), 0, .))) %>%
   sf::st_as_sf()
 
 ```
@@ -53,17 +52,11 @@ clean_dta %>%
 
 ```
 
-```{r, eval=FALSE}
-
-clean_dta %>%
-  st_write("acp_all.geojson", driver = "GeoJSON")
-
-```
-
-```{r, eval=FALSE}
+```{r}
 
 clean_dta %>%
   ms_simplify(keep = 0.05) %>%
+  st_transform(crs = "urn:ogc:def:crs:OGC:1.3:CRS84") %>%
   st_write("acp_all_simplified.geojson", driver = "GeoJSON")
 
 ```
