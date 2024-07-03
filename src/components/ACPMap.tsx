@@ -43,14 +43,16 @@ function ACPMap() {
         <ControlPanel setParentDate={setFilterDate} />
         <Map
           initialViewState={{
-          latitude: 40,
-          longitude: -100,
-          zoom: 3
+            latitude: 40,
+            longitude: -100,
+            zoom: 4
           }}
           mapStyle="mapbox://styles/mapbox/light-v9"
           mapboxAccessToken={MAPBOX_TOKEN}
           interactiveLayerIds={['mapbox-test-layer']}
           onMouseMove={onHover}
+          minZoom={4}
+          maxZoom={13}
         >
             <Source 
               id={tileset_id}
