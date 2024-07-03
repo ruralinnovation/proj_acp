@@ -2,7 +2,12 @@ import { Expression } from "mapbox-gl";
 import { CategoricalScale } from "../types";
 import type {FillLayer} from 'react-map-gl';
 
-export const getFillLayer = (layer_id: string, variable: string, fill_opacity: number, scale: CategoricalScale): FillLayer => {
+export const getFillLayer = (
+  layer_id: string, 
+  variable: string, 
+  fill_opacity: number, 
+  scale: CategoricalScale
+): FillLayer => {
     
   // Initialize the fill-color array with the default color from the scale
   let fillColorArray: Expression = [
@@ -19,8 +24,8 @@ export const getFillLayer = (layer_id: string, variable: string, fill_opacity: n
 
   // Construct the data layer object
   let dataLayer: FillLayer = {
-    id: "mapbox-test-layer",
-    source: "ruralinno.6xfksolh",
+    id: layer_id,
+    source: "ruralinno.2gmid5km",
     "source-layer": "acp_new_england",
     type: 'fill',
     paint: {

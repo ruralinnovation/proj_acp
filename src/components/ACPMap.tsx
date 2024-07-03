@@ -1,14 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 
 import Map, {Source, Layer} from 'react-map-gl';
 import { MapLayerMouseEvent } from 'mapbox-gl';
 
 import style from './styles/ACPMap.module.css';
-
-import type { FeatureCollection } from "geojson";
-
-import acp_dta_geojson from '../data/acp_new_england.json';
-const acp_dta = acp_dta_geojson as FeatureCollection;
 
 import ControlPanel from './ControlPanel';
 import RichTooltip from './RichTooltip';
@@ -24,21 +19,19 @@ function ACPMap() {
 
   const [month, year]: string[] = filterDate.split("/");
   const variable_suffix: string = year + '.' + month.padStart(2, '0') + '.01'
-  // const dataLayer = getFillLayer("data", "Percent_" + variable_suffix, .7, ACPMapScale);
-  const dataLayer = getFillLayer("mapbox_test_layer", "Percent_" + variable_suffix, .7, ACPMapScale)
+  const dataLayer = useMemo(() => {
+    return getFillLayer("mapbox-test-layer", "Percent_" + variable_suffix, .7, ACPMapScale);
+  }, [variable_suffix]); 
 
   const onHover: ((e: MapLayerMouseEvent) => void) | undefined = useCallback((event: MapLayerMouseEvent) => {
 
-    console.log("WHAT IS EVENT ", event);
-    // const {
-    //   features,
-    //   point: { x, y }
-    // } = event;
-    // const hoveredFeature = features && features[0];
-
-    // console.log("hoveredFeature? ", hoveredFeature);
+    const {
+      features,
+      point: { x, y }
+    } = event;
+    const hoveredFeature = features && features[0];
   
-    // setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
+    setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
 
   }, []);
 
@@ -58,9 +51,9 @@ function ACPMap() {
           onMouseMove={onHover}
         >
             <Source 
-              id="ruralinno.6xfksolh"
+              id="ruralinno.2gmid5km"
               type="vector"
-              url="mapbox://ruralinno.6xfksolh"
+              url="mapbox://ruralinno.2gmid5km"
             >
               <Layer
                 {...dataLayer}

@@ -23,6 +23,8 @@ const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo })
         }
     }
 
+    trendline_data.sort((a: any, b: any) => a.date - b.date);
+
     return (
         <div className={style['tooltip']} style={{left: hoverInfo.x, top: hoverInfo.y}}>
             <div>
@@ -32,8 +34,6 @@ const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo })
                     <b>As of {formatDate(new Date(variable_suffix.replace(/\./g, "-")))}</b>:<br/>
                     Subscribed: {hoverInfo.feature.properties['Subscribed_' + variable_suffix]}<br/>
                     Percent subscribed: {format(".3")(hoverInfo.feature.properties['Percent_' + variable_suffix]) + "%"}<br/>
-                    Change subscribed: {format(",")(hoverInfo.feature.properties['Change_Subscribed_' + variable_suffix])}<br/>
-                    Change percent: {format(",.2s")(hoverInfo.feature.properties['Change_Percent_' + variable_suffix]) + "%"}<br/>
                 </p>
             </div>
             <TrendLine data={trendline_data} selected_date={new Date(variable_suffix.replace(/\./g, "-"))} />

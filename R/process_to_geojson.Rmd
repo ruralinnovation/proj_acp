@@ -32,7 +32,7 @@ raw_dta <- st_read("acp_uptake_wide.gpkg")
 clean_dta <- raw_dta %>%
   select(Zipcode, Eligible, tidyr::starts_with("Subscribed_"), tidyr::starts_with("Percent"), geom) %>%
   mutate(Zipcode = as.character(Zipcode)) %>%
-  mutate(across(!c(Zipcode, geom), ~ ifelse(is.na(.), 0, .))) %>%
+  # mutate(across(!c(Zipcode, geom), ~ ifelse(is.na(.), 0, .))) %>%
   sf::st_as_sf()
 
 ```
