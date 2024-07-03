@@ -58,9 +58,9 @@ function ACPMap() {
           onMouseMove={onHover}
         >
             <Source 
-              id="ruralinno.6vp9at1l"
+              id="ruralinno.6xfksolh"
               type="vector"
-              url="mapbox://ruralinno.6vp9at1l"
+              url="mapbox://ruralinno.6xfksolh"
             >
               <Layer
                 {...dataLayer}

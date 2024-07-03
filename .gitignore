@@ -43,6 +43,7 @@ vignettes/*.pdf
 
 # data files are not versioned controlled by default,
 # but excpetions can be made when needed with `git add -f ...`
+*.mbtiles
 *.csv
 *.xlsx
 *.gpkg
