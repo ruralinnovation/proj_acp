@@ -24,3 +24,13 @@
 .slider p {
     margin: 00px 0px 0px 0px
 }
+
+.logos-wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.logo {
+    height: 80px;
+}
