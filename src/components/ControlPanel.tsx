@@ -91,7 +91,7 @@ function ControlPanel({ setParentDate, setParentLayerFilter }: ControlPanelProps
       </div>
       <hr />
       <div className={style['slider']}>
-        <p><b>Enrollment proportion filter</b></p>
+        <p><b>Percent enrolled filter</b>: {proportionFilter[0] + "-" + proportionFilter[1] + "%" }</p>
         <Slider
           getAriaLabel={() => 'Percent subscribed'}
           value={proportionFilter}
