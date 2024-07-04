@@ -17,7 +17,8 @@ const tileset_id = "ruralinno.4b5py10v";
 
 function ACPMap() {
   const [ hoverInfo, setHoverInfo ] = useState<any>(null);
-  const [ filterDate, setFilterDate] = useState<string>("02/2024");
+  const [ filterDate, setFilterDate ] = useState<string>("02/2024");
+  const [ layerFilter, setLayerFilter ] = useState<(string | (string | number | string[])[])[]>(['all']);
 
   const [month, year]: string[] = filterDate.split("/");
   const variable_suffix: string = year + '.' + month.padStart(2, '0') + '.01'
@@ -40,7 +41,7 @@ function ACPMap() {
   return (
     <>
       <div className={style["acp-map"]}>
-        <ControlPanel setParentDate={setFilterDate} />
+        <ControlPanel setParentDate={setFilterDate} setParentLayerFilter={setLayerFilter} />
         <Map
           initialViewState={{
             latitude: 40,
@@ -61,6 +62,7 @@ function ACPMap() {
             >
               <Layer
                 {...dataLayer}
+                filter={layerFilter}
               />
             </Source>
         </Map>

@@ -32,13 +32,18 @@ for (let year = 2022; year <= 2024; year++) {
 
 interface ControlPanelProps {
   setParentDate: Dispatch<SetStateAction<string>>;
+  setParentLayerFilter: Dispatch<SetStateAction<(string | (string | number | string[])[])[]>>;
 }
 
-function ControlPanel({ setParentDate }: ControlPanelProps) {
+function ControlPanel({ setParentDate, setParentLayerFilter }: ControlPanelProps) {
 
   const [ date, setDate ] = useState<string>(date_lookup[26]);
+  const [ proportionFilter, setProportionFilter ] = useState<number[]>([0, 100]);
 
-  const handleChange = (_event: Event, newValue: number | number[]) => {
+  const [month, year]: string[] = date.split("/");
+  const variable_suffix: string = year + '.' + month.padStart(2, '0') + '.01'
+
+  const handleDateChange = (_event: Event, newValue: number | number[]) => {
 
     if (typeof newValue == "number") {
       setDate(date_lookup[newValue]);
@@ -46,6 +51,21 @@ function ControlPanel({ setParentDate }: ControlPanelProps) {
     }
 
   };
+
+  const handleProportionChange = (_event: Event, newValue: number | number[]) => {
+    const isNumberArray: boolean = Array.isArray(newValue) && newValue.every(item => typeof item === 'number');
+    if (isNumberArray) {
+      const numberArray = newValue as number[];
+      setProportionFilter(numberArray);
+      const layer_filter = [
+        'all',
+        ['>=', ['get', 'Percent_' + variable_suffix], numberArray[0]],
+        ['<=', ['get', 'Percent_' + variable_suffix], numberArray[1]]
+      ];
+      setParentLayerFilter(layer_filter);
+    }
+  };
+  
 
   return (
     <div className={style['control-panel']}>
@@ -64,9 +84,19 @@ function ControlPanel({ setParentDate }: ControlPanelProps) {
           step={1}
           valueLabelDisplay="off"
           marks={valid_dates}
-          onChange={handleChange}
+          onChange={handleDateChange}
           min={1}
           max={26}
+        />
+      </div>
+      <hr />
+      <div className={style['slider']}>
+        <p><b>Enrollment proportion filter</b></p>
+        <Slider
+          getAriaLabel={() => 'Percent subscribed'}
+          value={proportionFilter}
+          valueLabelDisplay="auto"
+          onChange={handleProportionChange}
         />
       </div>
     </div>
