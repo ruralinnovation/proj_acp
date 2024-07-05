@@ -1,4 +1,19 @@
 .acp-map {
     width: 100vw;
     height: 100vh;
+
+    position: fixed;
+
+    top: 0px;
+    left: 0px;
+}
+
+
+@media (max-width: 600px) {
+
+    .acp-map {
+        position: relative;
+        height: 90vh;
+    }
+
 }
