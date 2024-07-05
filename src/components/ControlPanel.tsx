@@ -96,6 +96,7 @@ function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_l
             onChange={handleProportionChange}
           />
         </div>
+        <hr />
       </div>
     </div>
   )
