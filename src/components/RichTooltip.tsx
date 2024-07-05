@@ -5,7 +5,9 @@ import { format } from 'd3-format';
 import TrendLine from './TrendLine';
 
 import { timeFormat } from 'd3-time-format';
-const formatDate = timeFormat("%m-%y");
+const formatDate = timeFormat("%m/%y");
+
+import { parseDate } from '../utils';
 
 interface RichTooltipProps {
     variable_suffix: string,
@@ -31,7 +33,7 @@ const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo })
                 <h2>Zipcode: {hoverInfo.feature.properties.Zipcode}</h2>
                 <p className={style['metrics']}>
                     {/* Eligble: {hoverInfo.feature.properties['Eligible']}<br/> */}
-                    <b>As of {formatDate(new Date(variable_suffix.replace(/\./g, "-")))}</b>:<br/>
+                    <b>As of {formatDate(parseDate(variable_suffix))}</b>:<br/>
                     Subscribed: {hoverInfo.feature.properties['Subscribed_' + variable_suffix]}<br/>
                     Percent subscribed: {format(".3")(hoverInfo.feature.properties['Percent_' + variable_suffix]) + "%"}<br/>
                 </p>
