@@ -13,34 +13,14 @@ import { useState } from 'react';
 import lisc_logo from "../assets/Rural_stacked corrected png.png";
 import cori_logo from "../assets/Full-Logo_CORI_Black.svg";
 
-const valid_dates: { value: number} [] = [];
-const date_lookup: Record<number, string> = {};
-
-// 2022.01.01 - Start
-// 2024.02.01 - End
-
-let step: number = 0;
-for (let year = 2022; year <= 2024; year++) {
-  for (let month = 1; month <= 12; month++) {
-    
-    if (year === 2024 && month > 2) {
-      break;
-    }
-
-    step = step + 1;
-
-    valid_dates.push({value: step});
-    date_lookup[step] = month + "/" + year;
-
-  }
-}
-
 interface ControlPanelProps {
   setParentDate: Dispatch<SetStateAction<string>>;
   setParentLayerFilter: Dispatch<SetStateAction<(string | (string | number | string[])[])[]>>;
+  valid_dates: { value: number} [];
+  date_lookup: Record<number, string>;
 }
 
-function ControlPanel({ setParentDate, setParentLayerFilter }: ControlPanelProps) {
+function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_lookup }: ControlPanelProps) {
 
   const [ date, setDate ] = useState<string>(date_lookup[26]);
   const [ proportionFilter, setProportionFilter ] = useState<number[]>([0, 100]);
@@ -106,7 +86,7 @@ function ControlPanel({ setParentDate, setParentLayerFilter }: ControlPanelProps
       </div>
       <hr />
       <div id={style['enrollment-slider']} className={style['slider']}>
-        <p><b>Percent enrolled filter</b>: {proportionFilter[0] + "-" + proportionFilter[1] + "%" }</p>
+        <p><b>Filter percent enrolled</b>: {proportionFilter[0] + "-" + proportionFilter[1] + "%" }</p>
         <Slider
           getAriaLabel={() => 'Percent subscribed'}
           value={proportionFilter}

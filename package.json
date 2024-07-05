@@ -13,6 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@mapbox/mapbox-gl-geocoder": "^5.0.2",
     "@mui/material": "^5.15.20",
     "@types/d3-format": "^3.0.4",
     "@types/geojson": "^7946.0.14",
@@ -31,6 +32,7 @@
     "@types/d3": "^7.4.3",
     "@types/d3-time-format": "^4.0.3",
     "@types/lodash": "^4.17.6",
+    "@types/mapbox__mapbox-gl-geocoder": "^5.0.0",
     "@types/maplibre-gl": "^1.14.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

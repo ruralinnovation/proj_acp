@@ -37,3 +37,18 @@ export const getFillLayer = (
 
   return dataLayer;
 };
+
+export const parseDate = (
+  date: string
+): Date => {
+
+  // Split the string by '-'
+  const parts = date.split('.');
+
+  // Extract year, month (subtracting 1 for zero-indexed month), and day
+  const year = parseInt(parts[0]);
+  const month = parseInt(parts[1]) - 1; // Months in Date constructor are zero-indexed
+  const day = parseInt(parts[2]);
+
+  return new Date(year, month, day);
+}
