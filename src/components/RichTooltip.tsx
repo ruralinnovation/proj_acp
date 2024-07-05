@@ -27,8 +27,6 @@ const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo })
 
     trendline_data.sort((a: any, b: any) => a.date - b.date);
 
-    console.log("Why is ", variable_suffix.replace(/\./g, "-"), new Date(variable_suffix.replace(/\./g, "-")), formatDate(new Date(variable_suffix.replace(/\./g, "-"))))
-
     return (
         <div className={style['tooltip']} style={{left: hoverInfo.x, top: hoverInfo.y}}>
             <div>

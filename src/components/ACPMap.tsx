@@ -40,7 +40,9 @@ function ACPMap() {
   const [hoverInfo, setHoverInfo] = useState<any>(null);
   const [filterDate, setFilterDate] = useState<string>("02/2024");
   const [layerFilter, setLayerFilter] = useState<(string | (string | number | string[])[])[]>(['all']);
+
   const mapRef = useRef<MapRef>(null);
+  const geocoderRef = useRef<MapboxGeocoder | null>(null); // Ref to hold the geocoder instance
 
   const [month, year]: string[] = filterDate.split("/");
   const variable_suffix: string = year + '.' + month.padStart(2, '0') + '.01';
@@ -50,7 +52,6 @@ function ACPMap() {
 
   const onHover: ((e: MapLayerMouseEvent) => void) | undefined = useCallback((event: MapLayerMouseEvent) => {
     const { features, point: { x, y } } = event;
-    console.log("WHAT ARE FEATURES ", features, event);
     const hoveredFeature = features && features[0];
     setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
   }, []);
@@ -58,13 +59,19 @@ function ACPMap() {
   useEffect(() => {
     if (mapRef.current) {
       const map = mapRef.current.getMap();
-      const geocoder = new MapboxGeocoder({
-        accessToken: MAPBOX_TOKEN,
-        marker: false,
-        mapboxgl: mapboxgl,
-        countries: 'us'
-      });
-      map.addControl(geocoder, 'top-right');
+
+      if (geocoderRef.current === null) {
+
+        const geocoder = new MapboxGeocoder({
+          accessToken: MAPBOX_TOKEN,
+          marker: false,
+          mapboxgl: mapboxgl,
+          countries: 'us'
+        });
+
+        map.addControl(geocoder, 'top-right');
+        geocoderRef.current = geocoder;
+      }
     }
   }, [mapRef.current]);
 

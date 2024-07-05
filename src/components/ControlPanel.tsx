@@ -65,34 +65,37 @@ function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_l
         <img className={style["logo"]} src={cori_logo} alt="CORI logo"/>
       </div>
       <h1>ACP Enrollment</h1>
-      <p>
-        Map showing ACP enrollment by zipcode by month. Hover over a zipcode to see details.
+      <p style={{fontSize: ".9rem", color: "dimgray"}}>
+        The <a href="https://www.fcc.gov/acp" target="_blank">Affordable Connectivity Program</a> (ACP) was an FCC program that alleviated the cost burden of broadband for low 
+        income households. This map allows users to investigate the percentage of ACP enrollment participation by ZIP code over time.
       </p>
       <hr />
       <CategoricalLegend title={"Percent enrolled"} scale={ ACPMapScale } na_message='No data available'/>
       <hr />
-      <div className={style['slider']}>
-        <p><b>Month</b>: {date}</p>
-        <Slider
-          aria-label="Custom marks"
-          defaultValue={26}
-          step={1}
-          valueLabelDisplay="off"
-          marks={valid_dates}
-          onChange={handleDateChange}
-          min={1}
-          max={26}
-        />
-      </div>
-      <hr />
-      <div id={style['enrollment-slider']} className={style['slider']}>
-        <p><b>Filter percent enrolled</b>: {proportionFilter[0] + "-" + proportionFilter[1] + "%" }</p>
-        <Slider
-          getAriaLabel={() => 'Percent subscribed'}
-          value={proportionFilter}
-          valueLabelDisplay="off"
-          onChange={handleProportionChange}
-        />
+      <div className={style['filters']}>
+        <h2>Filters</h2>
+        <div className={style['slider']}>
+          <p><b>Month</b>: {date}</p>
+          <Slider
+            aria-label="Custom marks"
+            defaultValue={26}
+            step={1}
+            valueLabelDisplay="off"
+            marks={valid_dates}
+            onChange={handleDateChange}
+            min={1}
+            max={26}
+          />
+        </div>
+        <div id={style['enrollment-slider']} className={style['slider']}>
+          <p><b>Percent enrolled</b>: {proportionFilter[0] + "-" + proportionFilter[1] + "%" }</p>
+          <Slider
+            getAriaLabel={() => 'Percent subscribed'}
+            value={proportionFilter}
+            valueLabelDisplay="off"
+            onChange={handleProportionChange}
+          />
+        </div>
       </div>
     </div>
   )
