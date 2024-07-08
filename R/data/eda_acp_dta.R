@@ -6,7 +6,7 @@ dta <- cori.db::read_db(con, 'acp_dta_zip')
 
 
 ## check when it's above 100
-check <- dta %>% 
+nrow(dta %>% 
   filter(
     variable == 'percent'
-  ) 
+  ) %>% filter( value > 100))
