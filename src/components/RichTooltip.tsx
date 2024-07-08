@@ -31,12 +31,14 @@ const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo })
         <div className={style['tooltip']} style={{left: hoverInfo.x, top: hoverInfo.y}}>
             <div>
                 <h2>Zipcode: {hoverInfo.feature.properties.Zipcode}</h2>
-                <p className={style['metrics']}>
+                <div className={style['metrics']}>
                     {/* Eligble: {hoverInfo.feature.properties['Eligible']}<br/> */}
-                    <b>As of {formatDate(parseDate(variable_suffix))}</b>:<br/>
+                    <p><b>As of {formatDate(parseDate(variable_suffix))}</b>:</p>
+                    <p>
                     Subscribed: {hoverInfo.feature.properties['Subscribed_' + variable_suffix]}<br/>
-                    Percent subscribed: {format(".3")(hoverInfo.feature.properties['Percent_' + variable_suffix]) + "%"}<br/>
-                </p>
+                    Percent subscribed: {format(".3")(hoverInfo.feature.properties['Percent_' + variable_suffix]) + "%"}
+                    </p>
+                </div>
             </div>
             <TrendLine data={trendline_data} selected_date={new Date(variable_suffix.replace(/\./g, "-"))} />
         </div>

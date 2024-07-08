@@ -27,3 +27,8 @@
 .tooltip .metrics {
     margin: 0px 0px 15px 0px;
 }
+
+.tooltip .metrics p {
+    margin-top: 0px;
+    margin-bottom: .5rem;
+}
