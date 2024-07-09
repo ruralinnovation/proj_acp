@@ -11,10 +11,11 @@ import { parseDate } from '../utils';
 
 interface RichTooltipProps {
     variable_suffix: string,
-    hoverInfo: any
+    hoverInfo: any,
+    subscribed_val: number | null
 }
 
-const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo }) => {
+const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo, subscribed_val }) => {
 
     const trendline_data: {date: Date, value: number}[] = [];
     for (const [key, value] of Object.entries(hoverInfo.feature.properties)) {
@@ -38,7 +39,7 @@ const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo })
                     {/* Eligble: {hoverInfo.feature.properties['Eligible']}<br/> */}
                     <p><b>As of {formatDate(parseDate(variable_suffix))}</b>:</p>
                     <p>
-                    {/* Subscribed: {hoverInfo.feature.properties['Subscribed_' + variable_suffix]}<br/> */}
+                    Subscribed: {subscribed_val? subscribed_val : "N/A"}<br/>
                     Percent subscribed: {format(".3")(hoverInfo.feature.properties[variable_suffix]) + "%"}
                     </p>
                 </div>

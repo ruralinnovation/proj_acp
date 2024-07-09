@@ -6,6 +6,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
+import { csv } from 'd3-fetch';
+import type { DSVRowArray } from 'd3';
+
 import style from './styles/ACPMap.module.css';
 
 import ControlPanel from './ControlPanel';
@@ -40,12 +43,13 @@ for (let year = 2022; year <= 2024; year++) {
   }
 }
 
-console.log("valid_dates ", valid_dates, valid_dates.length);
-
 function ACPMap() {
+
   const [hoverInfo, setHoverInfo] = useState<any>(null);
   const [filterDate, setFilterDate] = useState<string>("01/2024");
   const [layerFilter, setLayerFilter] = useState<(string | (string | number | string[])[])[]>(['all']);
+  const [subscribed_lookup, setSubscribedLookup] = useState<DSVRowArray<string> | null>(null);
+  const [subscribed_val, setSubscribedVal] = useState<number | null>(null);
 
   const mapRef = useRef<MapRef>(null);
   const geocoderRef = useRef<MapboxGeocoder | null>(null); // Ref to hold the geocoder instance
@@ -58,9 +62,22 @@ function ACPMap() {
   }, [variable_suffix]);
 
   const onHover: ((e: MapLayerMouseEvent) => void) | undefined = useCallback((event: MapLayerMouseEvent) => {
+
     const { features, point: { x, y } } = event;
     const hoveredFeature = features && features[0];
     setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
+
+    if (subscribed_lookup !== null && hoveredFeature !== undefined && hoveredFeature?.properties !== null) {
+      const subscribed_obj = subscribed_lookup.find(d => d.Zipcode === hoveredFeature.properties!.Zipcode);
+      if (subscribed_obj) {
+        const subscribed_obj_val: number = +subscribed_obj[variable_suffix];
+        setSubscribedVal(subscribed_obj_val);
+      }
+    }
+    else {
+      setSubscribedVal(null);
+    }
+
   }, []);
 
   useEffect(() => {
@@ -82,6 +99,19 @@ function ACPMap() {
     }
   }, [mapRef.current]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await csv('/src/data/subscribed_lookup.csv'); // Adjust the path as needed
+        setSubscribedLookup(data);
+      } catch (error) {
+        console.error('Error reading CSV file:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className={style["acp-map"]}>
@@ -97,6 +127,12 @@ function ACPMap() {
           mapboxAccessToken={MAPBOX_TOKEN}
           interactiveLayerIds={['mapbox-test-layer']}
           onMouseMove={onHover}
+          onMouseLeave={d => {
+            console.log("MOUSE HAS LEFT ", d);
+          }}
+          onMouseOut={_event => {
+            setHoverInfo(null);
+          }}
           minZoom={4}
           maxZoom={13}
         >
@@ -111,7 +147,7 @@ function ACPMap() {
             />
           </Source>
         </Map>
-        {hoverInfo && <RichTooltip hoverInfo={hoverInfo} variable_suffix={variable_suffix} />}
+        {hoverInfo && <RichTooltip hoverInfo={hoverInfo} variable_suffix={variable_suffix} subscribed_val={subscribed_val} />}
       </div>
     </>
   );

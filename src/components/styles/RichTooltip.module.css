@@ -2,6 +2,8 @@
 
     font-family: 'Courier New', Courier, monospace;
 
+    display: block;
+
     position: absolute;
     padding: 15px;
     margin: 10px;
@@ -12,7 +14,7 @@
     border: 1px solid black;
     border-radius: 5px;
 
-    max-width: 300px;
+    width: 250px;
     font-size: 1rem;
 
     z-index: 3;
@@ -21,7 +23,11 @@
 
 .tooltip h2 {
     margin: 0px 0px 15px 0px;
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+}
+
+.tooltip p {
+    font-size: .9rem;
 }
 
 .tooltip .metrics {
@@ -31,4 +37,12 @@
 .tooltip .metrics p {
     margin-top: 0px;
     margin-bottom: .5rem;
+}
+
+@media (max-width: 600px) {
+
+    .tooltip {
+        display: none;
+    }
+
 }
