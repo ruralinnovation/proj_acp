@@ -25,8 +25,8 @@ export const getFillLayer = (
   // Construct the data layer object
   let dataLayer: FillLayer = {
     id: layer_id,
-    source: "ruralinno.4b5py10v",
-    "source-layer": "acp_all_simplified-4eyk9g",
+    source: "ruralinno.2x4she31",
+    "source-layer": "acp_all_test",
     type: 'fill',
     paint: {
       'fill-color': fillColorArray,
@@ -38,17 +38,29 @@ export const getFillLayer = (
   return dataLayer;
 };
 
+// export const parseDate = (
+//   date: string
+// ): Date => {
+
+//   // Split the string by '-'
+//   const parts = date.split('.');
+
+//   // Extract year, month (subtracting 1 for zero-indexed month), and day
+//   const year = parseInt(parts[0]);
+//   const month = parseInt(parts[1]) - 1; // Months in Date constructor are zero-indexed
+//   const day = parseInt(parts[2]);
+
+//   return new Date(year, month, day);
+// }
+
 export const parseDate = (
   date: string
 ): Date => {
 
-  // Split the string by '-'
-  const parts = date.split('.');
+  const [yearStr, monthStr]: string[] = date.split("_");
+  const year: number = parseInt("20" + yearStr, 10); // Assuming 21st century
+  const month: number = parseInt(monthStr, 10) - 1; // Months are zero-based in JavaScript
+  const clean_date: Date = new Date(year, month);
 
-  // Extract year, month (subtracting 1 for zero-indexed month), and day
-  const year = parseInt(parts[0]);
-  const month = parseInt(parts[1]) - 1; // Months in Date constructor are zero-indexed
-  const day = parseInt(parts[2]);
-
-  return new Date(year, month, day);
+  return clean_date;
 }

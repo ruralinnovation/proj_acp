@@ -29,10 +29,94 @@ raw_dta <- st_read("acp_uptake_wide.gpkg")
 
 ```{r}
 
+zip_county_cd <- readr::read_csv("zip_county_cd.csv")
+
+```
+
+```{r}
+
 clean_dta <- raw_dta %>%
   select(Zipcode, Eligible, tidyr::starts_with("Subscribed_"), tidyr::starts_with("Percent"), geom) %>%
   mutate(Zipcode = as.character(Zipcode)) %>%
+  left_join(
+    .,
+    zip_county_cd,
+    by = c("Zipcode"="zipcode")
+  ) %>%
   sf::st_as_sf()
+
+```
+
+
+```{r}
+
+simplest_file <- clean_dta %>%
+  select(Zipcode, cd_name, county_name, tidyr::contains("Percent")) %>%
+  mutate(across(starts_with("Percent_"), ~ as.integer(round(., 0))) ) %>%
+  mutate(across(starts_with("Subscribed_"), ~ as.integer(round(., 0))) ) %>%
+  select(
+    Zipcode,
+    county_name,
+    cd_name,
+    contains(".01."),
+    contains(".03."),
+    contains(".05."), 
+    contains(".07."), contains(".09."), 
+    contains(".11.")
+  ) %>%
+  rename_with(
+  .fn = ~ stringr::str_replace_all(., "Percent\\_(\\d{2})(\\d{2})\\.(\\d{2})\\..*", "\\2_\\3"),
+    .cols = starts_with("Percent_")
+  ) %>%
+  rename_with(
+  .fn = ~ stringr::str_replace_all(., "Subscribed\\_(\\d{2})(\\d{2})\\.(\\d{2})\\..*", "s_\\2_\\3"),
+    .cols = starts_with("Subscribed")
+  ) %>%
+  rename(
+    cd = cd_name,
+    cty = county_name
+  )
+  
+
+simplest_file %>%
+  ms_simplify(keep = 0.05, keep_shapes = TRUE, snap = T) %>%
+  st_transform(crs = "urn:ogc:def:crs:OGC:1.3:CRS84") %>%
+  st_write("acp_all_test.geojson", driver = "GeoJSON")
+
+# tippecanoe -o acp_all_test.mbtiles R/acp_all_test.geojson --force -Z 3 -z 10 -m 10 -ac --single-precision --no-simplification-of-shared-nodes
+
+
+```
+
+
+```{r}
+
+# Make a lookup file for Subscribed
+subscribed_lookup <- clean_dta %>%
+  select(Zipcode, tidyr::contains("Subscribed")) %>%
+  mutate(across(starts_with("Subscribed_"), ~ as.integer(round(., 0))) ) %>%
+  select(
+    Zipcode,
+    contains(".01."),
+    contains(".03."),
+    contains(".05."), 
+    contains(".07."),
+    contains(".09."), 
+    contains(".11.")
+  ) %>%
+  rename_with(
+    .fn = ~ stringr::str_replace_all(., "Subscribed\\_(\\d{2})(\\d{2})\\.(\\d{2})\\..*", "\\2_\\3"),
+    .cols = starts_with("Subscribed")
+  ) %>%
+  sf::st_drop_geometry()
+
+readr::write_csv(subscribed_lookup, "subscribed_lookup.csv")
+
+arrow::write_parquet(subscribed_lookup, "test.parquet")
+arrow::write_feather(subscribed_lookup, "test.feather")
+
+json_data <- toJSON(subscribed_lookup, pretty = TRUE)
+writeLines(json_data, "subscribed_lookup.json")
 
 ```
 
@@ -55,8 +139,18 @@ clean_dta %>%
 ```{r}
 
 clean_dta %>%
-  ms_simplify(keep = 0.05) %>%
+  ms_simplify(keep = 0.01) %>%
   st_transform(crs = "urn:ogc:def:crs:OGC:1.3:CRS84") %>%
   st_write("acp_all_simplified.geojson", driver = "GeoJSON")
 
 ```
+
+
+```{r}
+
+test <- clean_dta %>%
+  sf::st_drop_geometry() %>%
+  readr::write_csv("test.csv")
+
+```
+

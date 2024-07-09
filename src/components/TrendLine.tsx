@@ -43,8 +43,8 @@ const TrendLine: React.FC<TrendLineProps> = ({ data, selected_date }) => {
 
     const svgRef = useRef<SVGSVGElement>(null);
 
-    const width = 200;
-    const height = 100;
+    const width = 225;
+    const height = 90;
 
     useEffect(() => {
     
@@ -59,7 +59,7 @@ const TrendLine: React.FC<TrendLineProps> = ({ data, selected_date }) => {
 
 
         const start_date = new Date(2022, 0, 1);
-        const end_date = new Date(2024, 1, 1);
+        const end_date = new Date(2024, 0, 1);
         const xScale = d3.scaleTime()
             .domain([start_date, end_date])
             .range([margin.left, width - margin.right]);
@@ -130,7 +130,7 @@ const TrendLine: React.FC<TrendLineProps> = ({ data, selected_date }) => {
 
   return (
     <div className={style['trendline']}>
-        <h3>Percent subscribed over time</h3>
+        <h3>Percent enrolled over time</h3>
         <svg ref={svgRef} style={{width: "100%"}}>
             <g className="x-axis" />
             <g className="y-axis" />

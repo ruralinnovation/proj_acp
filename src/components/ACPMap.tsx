@@ -6,6 +6,9 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 
+import { csv } from 'd3-fetch';
+import type { DSVRowArray } from 'd3';
+
 import style from './styles/ACPMap.module.css';
 
 import ControlPanel from './ControlPanel';
@@ -15,7 +18,7 @@ import { getFillLayer } from '../utils';
 import { ACPMapScale } from '../constants';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
-const tileset_id = "ruralinno.4b5py10v";
+const tileset_id = "ruralinno.2x4she31";
 
 const valid_dates: { value: number} [] = [];
 const date_lookup: Record<number, string> = {};
@@ -24,8 +27,12 @@ let step: number = 0;
 for (let year = 2022; year <= 2024; year++) {
   for (let month = 1; month <= 12; month++) {
     
-    if (year === 2024 && month > 2) {
+    if (year === 2024 && month > 1) {
       break;
+    }
+
+    if (month % 2 === 0) {
+      continue
     }
 
     step = step + 1;
@@ -37,24 +44,41 @@ for (let year = 2022; year <= 2024; year++) {
 }
 
 function ACPMap() {
+
   const [hoverInfo, setHoverInfo] = useState<any>(null);
-  const [filterDate, setFilterDate] = useState<string>("02/2024");
+  const [filterDate, setFilterDate] = useState<string>("01/2024");
   const [layerFilter, setLayerFilter] = useState<(string | (string | number | string[])[])[]>(['all']);
+  const [subscribed_lookup, setSubscribedLookup] = useState<DSVRowArray<string> | null>(null);
+  const [subscribed_val, setSubscribedVal] = useState<number | null>(null);
 
   const mapRef = useRef<MapRef>(null);
   const geocoderRef = useRef<MapboxGeocoder | null>(null); // Ref to hold the geocoder instance
 
   const [month, year]: string[] = filterDate.split("/");
-  const variable_suffix: string = year + '.' + month.padStart(2, '0') + '.01';
+  const variable_suffix: string = year.slice(-2) + '_' + month.padStart(2, '0');
+
   const dataLayer = useMemo(() => {
-    return getFillLayer("mapbox-test-layer", "Percent_" + variable_suffix, .7, ACPMapScale);
+    return getFillLayer("mapbox-test-layer", variable_suffix, .7, ACPMapScale);
   }, [variable_suffix]);
 
   const onHover: ((e: MapLayerMouseEvent) => void) | undefined = useCallback((event: MapLayerMouseEvent) => {
+
     const { features, point: { x, y } } = event;
     const hoveredFeature = features && features[0];
     setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
-  }, []);
+
+    if (subscribed_lookup !== null && hoveredFeature !== undefined && hoveredFeature.properties !== null) {
+      const subscribed_obj = subscribed_lookup.find(d => d.Zipcode === hoveredFeature.properties!.Zipcode);
+      if (subscribed_obj) {
+        const subscribed_obj_val: number = +subscribed_obj[variable_suffix];
+        setSubscribedVal(subscribed_obj_val);
+      }
+    }
+    else {
+      setSubscribedVal(null);
+    }
+
+  }, [subscribed_lookup]);
 
   useEffect(() => {
     if (mapRef.current) {
@@ -75,6 +99,19 @@ function ACPMap() {
     }
   }, [mapRef.current]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await csv('/src/data/subscribed_lookup.csv'); // Adjust the path as needed
+        setSubscribedLookup(data);
+      } catch (error) {
+        console.error('Error reading CSV file:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className={style["acp-map"]}>
@@ -90,6 +127,9 @@ function ACPMap() {
           mapboxAccessToken={MAPBOX_TOKEN}
           interactiveLayerIds={['mapbox-test-layer']}
           onMouseMove={onHover}
+          onMouseOut={_event => {
+            setHoverInfo(null);
+          }}
           minZoom={4}
           maxZoom={13}
         >
@@ -104,7 +144,7 @@ function ACPMap() {
             />
           </Source>
         </Map>
-        {hoverInfo && <RichTooltip hoverInfo={hoverInfo} variable_suffix={variable_suffix} />}
+        {hoverInfo && <RichTooltip hoverInfo={hoverInfo} variable_suffix={variable_suffix} subscribed_val={subscribed_val} />}
       </div>
     </>
   );
