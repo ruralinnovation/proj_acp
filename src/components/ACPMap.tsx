@@ -102,7 +102,7 @@ function ACPMap() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await csv('/src/data/subscribed_lookup.csv'); // Adjust the path as needed
+        const data = await csv('subscribed_lookup.csv'); // Adjust the path as needed
         setSubscribedLookup(data);
       } catch (error) {
         console.error('Error reading CSV file:', error);
