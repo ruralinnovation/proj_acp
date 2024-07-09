@@ -67,7 +67,7 @@ function ACPMap() {
     const hoveredFeature = features && features[0];
     setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
 
-    if (subscribed_lookup !== null && hoveredFeature !== undefined && hoveredFeature?.properties !== null) {
+    if (subscribed_lookup !== null && hoveredFeature !== undefined && hoveredFeature.properties !== null) {
       const subscribed_obj = subscribed_lookup.find(d => d.Zipcode === hoveredFeature.properties!.Zipcode);
       if (subscribed_obj) {
         const subscribed_obj_val: number = +subscribed_obj[variable_suffix];
@@ -78,7 +78,7 @@ function ACPMap() {
       setSubscribedVal(null);
     }
 
-  }, []);
+  }, [subscribed_lookup]);
 
   useEffect(() => {
     if (mapRef.current) {
@@ -127,9 +127,6 @@ function ACPMap() {
           mapboxAccessToken={MAPBOX_TOKEN}
           interactiveLayerIds={['mapbox-test-layer']}
           onMouseMove={onHover}
-          onMouseLeave={d => {
-            console.log("MOUSE HAS LEFT ", d);
-          }}
           onMouseOut={_event => {
             setHoverInfo(null);
           }}

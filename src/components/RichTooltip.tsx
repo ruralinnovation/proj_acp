@@ -39,8 +39,8 @@ const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo, s
                     {/* Eligble: {hoverInfo.feature.properties['Eligible']}<br/> */}
                     <p><b>As of {formatDate(parseDate(variable_suffix))}</b>:</p>
                     <p>
-                    Subscribed: {subscribed_val? subscribed_val : "N/A"}<br/>
-                    Percent subscribed: {format(".3")(hoverInfo.feature.properties[variable_suffix]) + "%"}
+                    Enrolled: {subscribed_val? format(",")(subscribed_val) : "N/A"}<br/>
+                    Percent enrolled: {format(".3")(hoverInfo.feature.properties[variable_suffix]) + "%"}
                     </p>
                 </div>
             </div>

@@ -130,7 +130,7 @@ const TrendLine: React.FC<TrendLineProps> = ({ data, selected_date }) => {
 
   return (
     <div className={style['trendline']}>
-        <h3>Percent subscribed over time</h3>
+        <h3>Percent enrolled over time</h3>
         <svg ref={svgRef} style={{width: "100%"}}>
             <g className="x-axis" />
             <g className="y-axis" />
