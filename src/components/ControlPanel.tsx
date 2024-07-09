@@ -22,11 +22,11 @@ interface ControlPanelProps {
 
 function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_lookup }: ControlPanelProps) {
 
-  const [ date, setDate ] = useState<string>(date_lookup[26]);
+  const [ date, setDate ] = useState<string>(date_lookup[13]);
   const [ proportionFilter, setProportionFilter ] = useState<number[]>([0, 100]);
 
   const [month, year]: string[] = date.split("/");
-  const variable_suffix: string = year + '.' + month.padStart(2, '0') + '.01';
+  const variable_suffix: string = year.slice(-2) + '_' + month.padStart(2, '0');
 
   const handleDateChange = (_event: Event, newValue: number | number[]) => {
 
@@ -50,8 +50,8 @@ function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_l
     debounce((numberArray: number[]) => {
       const layer_filter = [
         'all',
-        ['>=', ['get', 'Percent_' + variable_suffix], numberArray[0]],
-        ['<=', ['get', 'Percent_' + variable_suffix], numberArray[1]]
+        ['>=', ['get', variable_suffix], numberArray[0]],
+        ['<=', ['get', variable_suffix], numberArray[1]]
       ];
       setParentLayerFilter(layer_filter);
     }, 300),
@@ -78,13 +78,13 @@ function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_l
           <p><b>Month</b>: {date}</p>
           <Slider
             aria-label="Custom marks"
-            defaultValue={26}
+            defaultValue={13}
             step={1}
             valueLabelDisplay="off"
             marks={valid_dates}
             onChange={handleDateChange}
             min={1}
-            max={26}
+            max={13}
           />
         </div>
         <div id={style['enrollment-slider']} className={style['slider']}>

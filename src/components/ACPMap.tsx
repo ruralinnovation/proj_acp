@@ -15,7 +15,7 @@ import { getFillLayer } from '../utils';
 import { ACPMapScale } from '../constants';
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
-const tileset_id = "ruralinno.4b5py10v";
+const tileset_id = "ruralinno.2x4she31";
 
 const valid_dates: { value: number} [] = [];
 const date_lookup: Record<number, string> = {};
@@ -24,8 +24,12 @@ let step: number = 0;
 for (let year = 2022; year <= 2024; year++) {
   for (let month = 1; month <= 12; month++) {
     
-    if (year === 2024 && month > 2) {
+    if (year === 2024 && month > 1) {
       break;
+    }
+
+    if (month % 2 === 0) {
+      continue
     }
 
     step = step + 1;
@@ -36,18 +40,21 @@ for (let year = 2022; year <= 2024; year++) {
   }
 }
 
+console.log("valid_dates ", valid_dates, valid_dates.length);
+
 function ACPMap() {
   const [hoverInfo, setHoverInfo] = useState<any>(null);
-  const [filterDate, setFilterDate] = useState<string>("02/2024");
+  const [filterDate, setFilterDate] = useState<string>("01/2024");
   const [layerFilter, setLayerFilter] = useState<(string | (string | number | string[])[])[]>(['all']);
 
   const mapRef = useRef<MapRef>(null);
   const geocoderRef = useRef<MapboxGeocoder | null>(null); // Ref to hold the geocoder instance
 
   const [month, year]: string[] = filterDate.split("/");
-  const variable_suffix: string = year + '.' + month.padStart(2, '0') + '.01';
+  const variable_suffix: string = year.slice(-2) + '_' + month.padStart(2, '0');
+
   const dataLayer = useMemo(() => {
-    return getFillLayer("mapbox-test-layer", "Percent_" + variable_suffix, .7, ACPMapScale);
+    return getFillLayer("mapbox-test-layer", variable_suffix, .7, ACPMapScale);
   }, [variable_suffix]);
 
   const onHover: ((e: MapLayerMouseEvent) => void) | undefined = useCallback((event: MapLayerMouseEvent) => {
