@@ -3,7 +3,7 @@ import style from './styles/ControlPanel.module.css';
 import CategoricalLegend from './CategoricalLegend';
 import { ACPMapScale } from '../constants';
 
-import { Dispatch, SetStateAction, useCallback } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect } from 'react';
 
 import debounce from 'lodash/debounce';
 
@@ -12,6 +12,7 @@ import { useState } from 'react';
 
 import lisc_logo from "../assets/Rural_stacked corrected png.png";
 import cori_logo from "../assets/Full-Logo_CORI_Black.svg";
+// import { update } from 'lodash';
 
 interface ControlPanelProps {
   setParentDate: Dispatch<SetStateAction<string>>;
@@ -24,9 +25,6 @@ function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_l
 
   const [ date, setDate ] = useState<string>(date_lookup[13]);
   const [ proportionFilter, setProportionFilter ] = useState<number[]>([0, 100]);
-
-  const [month, year]: string[] = date.split("/");
-  const variable_suffix: string = year.slice(-2) + '_' + month.padStart(2, '0');
 
   const handleDateChange = (_event: Event, newValue: number | number[]) => {
 
@@ -42,12 +40,14 @@ function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_l
     if (isNumberArray) {
       const numberArray = newValue as number[];
       setProportionFilter(numberArray);
-      debouncedSetParentLayerFilter(numberArray);
+      updateLayerFilter(date, numberArray);
     }
   };
 
-  const debouncedSetParentLayerFilter = useCallback(
-    debounce((numberArray: number[]) => {
+  const updateLayerFilter = useCallback(
+    debounce((date: string, numberArray: number[]) => {
+      const [month, year]: string[] = date.split("/");
+      const variable_suffix: string = year.slice(-2) + '_' + month.padStart(2, '0');
       const layer_filter = [
         'all',
         ['>=', ['get', variable_suffix], numberArray[0]],
@@ -55,8 +55,13 @@ function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_l
       ];
       setParentLayerFilter(layer_filter);
     }, 300),
-    [variable_suffix, setParentLayerFilter]
+    [setParentLayerFilter]
   );
+
+  useEffect(() => {
+    updateLayerFilter(date, proportionFilter);
+  }, [date, proportionFilter, updateLayerFilter]);
+
 
   return (
     <div className={style['control-panel']}>

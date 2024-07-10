@@ -51,6 +51,8 @@ function ACPMap() {
   const [subscribed_lookup, setSubscribedLookup] = useState<DSVRowArray<string> | null>(null);
   const [subscribed_val, setSubscribedVal] = useState<number | null>(null);
 
+  console.log("layerFilter is ", layerFilter);
+
   const mapRef = useRef<MapRef>(null);
   const geocoderRef = useRef<MapboxGeocoder | null>(null); // Ref to hold the geocoder instance
 
