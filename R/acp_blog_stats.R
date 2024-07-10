@@ -171,6 +171,7 @@ participation_rate_rural <- acp_rural_def %>%
     value 
   )
 
+
 ### rural - annual average
 yearly_participation_rate_rural <- acp_rural_def %>% 
   filter(rural_def_2021 == 1) %>% 
@@ -295,6 +296,37 @@ claimed_support_rural <- acp_rural_def %>%
 
 
 ## persistent poverty ----------------------------------------------------------
+
+### ppov - monthly subscribers and participation rate
+participation_rate_pp <- acp_rural_def %>% 
+  filter(persistent_pov_flag == 1) %>% 
+  left_join(filter(., variable == 'eligible') %>% 
+              select(zipcode, eligible = value),
+            by = 'zipcode') %>% 
+  filter(variable %in% c('subscribed')) %>% 
+  rename(subscribed = value) %>% 
+  group_by(year, month) %>% 
+  summarise(
+    subscribed = sum(subscribed, na.rm = TRUE),
+    eligible = sum(eligible, na.rm = TRUE),
+    pct_participation = subscribed / eligible
+  ) %>% 
+  ungroup() %>% 
+  tidyr::pivot_longer(cols = c(pct_participation, subscribed),
+                      names_to = 'variable',
+                      values_to = 'value') %>% 
+  arrange(variable, year, month) %>% 
+  mutate(
+    location = 'Zips in Persistent Poverty Counties',
+    variable = ifelse(variable == 'pct_participation', 'Participation Rate', 'Number of Subscribers')
+  ) %>% 
+  select(
+    year,
+    month,
+    variable,
+    location,
+    value 
+  )
 
 ### annual average participation rate
 yearly_participation_rate_pp <- acp_rural_def %>% 
@@ -534,7 +566,8 @@ top10_change_claimed_support_pp <- acp_rural_def %>%
 
 monthly_stats <- participation_rate_us %>% 
   bind_rows(
-    participation_rate_rural
+    participation_rate_rural,
+    participation_rate_pp
   )
 
 annual_stats <- yearly_participation_rate_us %>% 
