@@ -31,27 +31,12 @@ export const getFillLayer = (
     paint: {
       'fill-color': fillColorArray,
       'fill-opacity': fill_opacity,
-      'fill-outline-color': '#6B9C85'
+      'fill-outline-color': '#58B4ED'
     }
   };
 
   return dataLayer;
 };
-
-// export const parseDate = (
-//   date: string
-// ): Date => {
-
-//   // Split the string by '-'
-//   const parts = date.split('.');
-
-//   // Extract year, month (subtracting 1 for zero-indexed month), and day
-//   const year = parseInt(parts[0]);
-//   const month = parseInt(parts[1]) - 1; // Months in Date constructor are zero-indexed
-//   const day = parseInt(parts[2]);
-
-//   return new Date(year, month, day);
-// }
 
 export const parseDate = (
   date: string
