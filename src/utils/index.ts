@@ -31,7 +31,7 @@ export const getFillLayer = (
     paint: {
       'fill-color': fillColorArray,
       'fill-opacity': fill_opacity,
-      'fill-outline-color': '#58B4ED'
+      'fill-outline-color': '#7DB395'
     }
   };
 

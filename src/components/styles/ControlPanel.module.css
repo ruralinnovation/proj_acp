@@ -44,6 +44,11 @@
 
 .filters {
     margin-top: 30px;
+    margin-bottom: 20px;
+}
+
+.methodology {
+    margin-top: 30px;
     margin-bottom: 100px;
 }
 
@@ -67,7 +72,7 @@
         max-width: none;
     }
 
-    .filters {
+    .methodology {
         margin-bottom: 10px;
     }
 
