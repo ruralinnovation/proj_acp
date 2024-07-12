@@ -71,11 +71,11 @@ function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_l
       </div>
       <h1>ACP Enrollment</h1>
       <p style={{fontSize: ".9rem", color: "dimgray"}}>
-        The <a href="https://www.fcc.gov/acp" target="_blank">Affordable Connectivity Program</a> (ACP) was an FCC program that alleviated the cost burden of broadband for low 
-        income households. This map allows users to investigate the percentage of ACP enrollment participation by ZIP code over time.
+        The <a href="https://www.fcc.gov/acp" target="_blank">Affordable Connectivity Program</a> (ACP) was an FCC program that alleviated the cost 
+        burden of broadband for low-income households. This map allows users to investigate the percentage of ACP enrollment participation by ZIP code over time.
       </p>
       <hr />
-      <CategoricalLegend title={"Percent enrolled"} scale={ ACPMapScale } na_message='No data available'/>
+      <CategoricalLegend title={"Percent of eligible households enrolled"} scale={ ACPMapScale } na_message='No data available'/>
       <hr />
       <div className={style['filters']}>
         <h2>Filters</h2>
@@ -102,6 +102,15 @@ function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_l
           />
         </div>
         <hr />
+      </div>
+      <div className={style['methodology']}>
+        <h2>Methodology</h2>
+        <p>
+          <a
+            href="https://www.lisc.org/media/filer_public/13/4d/134d8f53-fe33-4ab9-b54b-5523c0193c80/acp_methodology_faqs_1_20_2023.pdf"
+            target="_blank"
+            >Learn more about our data methodology.</a>
+        </p>
       </div>
     </div>
   )

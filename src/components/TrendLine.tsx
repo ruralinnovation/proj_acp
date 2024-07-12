@@ -32,7 +32,7 @@ const chartStyle = {
     gridLineColor: "#d0d2ce",
     gridLineOpacity: 1,
     // Colors and fills
-    defaultBarFill: "#234FBF",
+    defaultBarFill: "#00835D",
     // Line chart style
     strokeWidth: 4,
     strokeOpacity: 0.9
