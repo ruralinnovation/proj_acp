@@ -107,7 +107,7 @@ function ControlPanel({ setParentDate, setParentLayerFilter, valid_dates, date_l
         <h2>Methodology</h2>
         <p>
           <a
-            href="https://www.lisc.org/media/filer_public/13/4d/134d8f53-fe33-4ab9-b54b-5523c0193c80/acp_methodology_faqs_1_20_2023.pdf"
+            href="https://www.lisc.org/rural/our-work/broadband-infrastructure/resources/ruralacp/"
             target="_blank"
             >Learn more about our data methodology.</a>
         </p>
