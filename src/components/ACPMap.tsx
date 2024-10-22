@@ -23,6 +23,7 @@ const tileset_id = "ruralinno.2x4she31";
 const valid_dates: { value: number} [] = [];
 const date_lookup: Record<number, string> = {};
 
+// Generate date array and lookup for the date filter
 let step: number = 0;
 for (let year = 2022; year <= 2024; year++) {
   for (let month = 1; month <= 12; month++) {
@@ -48,13 +49,17 @@ function ACPMap() {
   const [hoverInfo, setHoverInfo] = useState<any>(null);
   const [filterDate, setFilterDate] = useState<string>("01/2024");
   const [layerFilter, setLayerFilter] = useState<(string | (string | number | string[])[])[]>(['all']);
-  const [subscribed_lookup, setSubscribedLookup] = useState<DSVRowArray<string> | null>(null);
-  const [subscribed_val, setSubscribedVal] = useState<number | null>(null);
+  
+  // stores the number of subscribers by Zip code over time
+  const [subscribedLookup, setSubscribedLookup] = useState<DSVRowArray<string> | null>(null);
+  // Number of subscribers for a selected date
+  const [subscribedVal, setSubscribedVal] = useState<number | null>(null);
 
   const mapRef = useRef<MapRef>(null);
   const geocoderRef = useRef<MapboxGeocoder | null>(null); // Ref to hold the geocoder instance
 
   const [month, year]: string[] = filterDate.split("/");
+  // The variable suffix encodes the year and month (e.g., 24_01 is January 2024)
   const variable_suffix: string = year.slice(-2) + '_' + month.padStart(2, '0');
 
   const dataLayer = useMemo(() => {
@@ -67,9 +72,10 @@ function ACPMap() {
     const hoveredFeature = features && features[0];
     setHoverInfo(hoveredFeature && { feature: hoveredFeature, x, y });
 
-    if (subscribed_lookup !== null && hoveredFeature !== undefined && hoveredFeature.properties !== null) {
-      const subscribed_obj = subscribed_lookup.find(d => d.Zipcode === hoveredFeature.properties!.Zipcode);
+    if (subscribedLookup !== null && hoveredFeature !== undefined && hoveredFeature.properties !== null) {
+      const subscribed_obj = subscribedLookup.find(d => d.Zipcode === hoveredFeature.properties!.Zipcode);
       if (subscribed_obj) {
+        // Update the number of subscribers to be for the right date
         const subscribed_obj_val: number = +subscribed_obj[variable_suffix];
         setSubscribedVal(subscribed_obj_val);
       }
@@ -78,8 +84,9 @@ function ACPMap() {
       setSubscribedVal(null);
     }
 
-  }, [subscribed_lookup]);
+  }, [subscribedLookup]);
 
+  // Add a Mapbox Geocoding widget
   useEffect(() => {
     if (mapRef.current) {
       const map = mapRef.current.getMap();
@@ -99,6 +106,7 @@ function ACPMap() {
     }
   }, [mapRef.current]);
 
+  // Load supplementary ACP enrollment data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -144,7 +152,7 @@ function ACPMap() {
             />
           </Source>
         </Map>
-        {hoverInfo && <RichTooltip hoverInfo={hoverInfo} variable_suffix={variable_suffix} subscribed_val={subscribed_val} />}
+        {hoverInfo && <RichTooltip hoverInfo={hoverInfo} variable_suffix={variable_suffix} subscribed_val={subscribedVal} />}
       </div>
     </>
   );

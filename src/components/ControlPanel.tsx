@@ -12,7 +12,6 @@ import { useState } from 'react';
 
 import lisc_logo from "../assets/Rural_stacked corrected png.png";
 import cori_logo from "../assets/Full-Logo_CORI_Black.svg";
-// import { update } from 'lodash';
 
 interface ControlPanelProps {
   setParentDate: Dispatch<SetStateAction<string>>;

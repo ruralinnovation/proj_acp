@@ -17,6 +17,8 @@ interface RichTooltipProps {
 
 const RichTooltip: React.FC<RichTooltipProps> = ({ variable_suffix, hoverInfo, subscribed_val }) => {
 
+    // Filter the properties to only include the data we want to plot in
+    // the line chart. If it starts with "2" it is a Pct. enrolled column
     const trendline_data: {date: Date, value: number}[] = [];
     for (const [key, value] of Object.entries(hoverInfo.feature.properties)) {
         if (key.startsWith("2") && typeof value == "number") {
