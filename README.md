@@ -8,4 +8,4 @@ To get set up locally, clone the repository and run `npm install` and then `npm 
 
 ## Project structure
 
-Data processing scripts for generating `mbtiles` are located in the `R` subdirectory. React components and code are located in the `src` subdirectory. `ACPMap.tsx` implements an interactive Mapbox map using `react-map-gl`. `ControlPanel.tsx` implements the map's data controls. `Trendline.tsx` implements a D3 line chart that is rendered in the map tooltip.
+Data processing scripts for generating a `geojson` file that is then converted to an `mbtiles` file are located in the `R` subdirectory. React components and code are located in the `src` subdirectory. `ACPMap.tsx` implements an interactive Mapbox map using `react-map-gl`. `ControlPanel.tsx` implements the map's data controls. `Trendline.tsx` implements a D3 line chart that is rendered in the map tooltip.
